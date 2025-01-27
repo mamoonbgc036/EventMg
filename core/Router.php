@@ -1,38 +1,50 @@
 <?php
-// core/Router.php
-
-
+// In Router.php
+namespace core;
 
 class Router
 {
     private $routes = [];
+    private $protectedRoutes = [];
 
-    public function addRoute($route, $handler)
+    public function addRoute($route, $action)
     {
-        $this->routes[$route] = $handler;
+        $this->routes[$route] = $action;
     }
 
-    public function dispatch($url)
+    // Add protected routes
+    public function addProtectedRoute($route, $action)
     {
-        $url = rtrim($url, '/');
+        $this->protectedRoutes[$route] = $action;
+    }
 
-        foreach ($this->routes as $route => $handler) {
-            $pattern = str_replace('/', '\/', $route);
-            $pattern = preg_replace('/\{(\w+)\}/', '(?P<$1>\d+)', $pattern);
-            $pattern = '/^' . $pattern . '$/';
+    public function dispatch($uri)
+    {
+        $isAuthenticated = isset($_SESSION['login']); // Check if user is logged in
 
-            if (preg_match($pattern, $url, $matches)) {
-                list($controller, $action) = explode('@', $handler);
-                $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-
-                $controller = new $controller();
-                call_user_func_array([$controller, $action], $params);
-                return;
+        // Match regular routes
+        foreach ($this->routes as $route => $action) {
+            if ($uri === $route) {
+                list($controller, $method) = explode('@', $action);
+                $controller = "App\\Controllers\\$controller";
+                $instance = new $controller();
+                return $instance->$method();
             }
         }
 
-        http_response_code(404);
-        echo '404 - Page Not Found';
+        // Match protected routes
+        foreach ($this->protectedRoutes as $route => $action) {
+            if ($uri === $route && !$isAuthenticated) {
+                header('Location: /EventMg/login');
+                exit;
+            } else {
+                if ($uri === $route) {
+                    list($controller, $method) = explode('@', $action);
+                    $controller = "App\\Controllers\\$controller";
+                    $instance = new $controller();
+                    return $instance->$method();
+                }
+            }
+        }
     }
 }
-?>

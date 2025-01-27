@@ -1,42 +1,71 @@
 <?php
-require_once ROOT . '/core/Controller.php';
-require_once ROOT . '/app/models/User.php';
+namespace App\Controllers;
+use App\Models\User;
+use Core\Controller;
+use Core\Validator;
+
 
 class AuthController extends Controller
 {
     public function login()
     {
-        die('check');
+        $this->view('auth/login');
+    }
+
+    public function getRform()
+    {
+        $this->view('auth/register');
+    }
+
+    public function enter()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
 
-            $user = new User();
-            $loggedInUser = $user->login($username, $password);
+            $validator = new Validator;
 
-            if ($loggedInUser) {
-                session_start();
-                $_SESSION['user_id'] = $loggedInUser['id'];
-                $_SESSION['role'] = $loggedInUser['role'];
-                header('Location: /events');
+            $errors = $validator->validate($_POST, [
+                'email' => 'required',
+                'password' => 'required',
+            ]);
+
+            // if (!empty($errors)) {
+            //     $_SESSION['errors'] = $errors;
+            //     header('Location: /EventMg/login');
+            //     exit();
+            // }
+
+
+            $user = User::getInstance();
+            $check = $user->check('users', ['email' => $_POST['email']]);
+            if ($check && password_verify($_POST['password'], $check['password'])) {
+                if (isset($_SESSION['errors'])) {
+                    $errors = $_SESSION['errors'];
+                    unset($_SESSION['errors']);
+                }
+                $_SESSION['login'] = true;
+                $_SESSION['email'] = $_POST['email'];
+                setcookie('email', $_POST['email'], time() + (86400 * 30), "/");
+                header('Location: /EventMg/events');
             } else {
                 echo "Invalid credentials!";
             }
-        } else {
-            $this->view('auth/login');
         }
     }
 
     public function register()
     {
+        $connection = User::getInstance();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'];
-            $email = $_POST['email'];
+
+
             $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-            $user = new User();
-            if ($user->register($username, $email, $password)) {
-                header('Location: /login');
+            $_POST['password'] = $password;
+
+            $check = $connection->store('users', $_POST);
+            if ($check) {
+                header('Location: /EventMg/login');
             } else {
                 echo "Registration failed!";
             }
@@ -47,9 +76,8 @@ class AuthController extends Controller
 
     public function logout()
     {
-        session_start();
         session_destroy();
-        header('Location: /login');
+        header('Location: /EventMg/login');
     }
 }
 ?>

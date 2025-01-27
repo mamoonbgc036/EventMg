@@ -1,8 +1,9 @@
-# .htaccess in the root directory
-
 # Enable URL rewriting
 RewriteEngine On
 
-# Redirect all requests to the public/index.php file
+# Exclude .jpg files from the redirection
+RewriteCond %{REQUEST_URI} !\.(jpg|jpeg)$
+
+# Redirect all other requests to the public/index.php file
 RewriteCond %{REQUEST_URI} !^/public/
 RewriteRule ^(.*)$ public/index.php [L,QSA]

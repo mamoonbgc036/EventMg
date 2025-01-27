@@ -1,11 +1,9 @@
 <?php
 // app/models/User.php
+namespace App\Models;
+use Config\Database;
 
-class User extends Model
+class User extends Database
 {
-    public function getUsers()
-    {
-        $this->db->query('SELECT * FROM users');
-        return $this->db->resultSet();
-    }
+
 }

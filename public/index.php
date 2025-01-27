@@ -1,24 +1,34 @@
 <?php
-// public/index.php
+
+session_start();
+
 define('ROOT', dirname(__DIR__));
-require_once ROOT . '/core/Controller.php';
-require_once ROOT . '/core/Model.php';
-require_once ROOT . '/core/Router.php';
-require_once ROOT . '/app/controllers/AuthController.php';
+
+
+
+require_once ROOT . '/autoload.php';
+
+use core\Router;
+
 
 $router = new Router();
 
-// Define routes
-$router->addRoute('/', 'HomeController@index');
-$router->addRoute('/login', 'AuthController@login');
-$router->addRoute('/events', 'EventController@index');
+
+$router->addRoute('/enter', 'AuthController@enter');
+$router->addRoute('/getRform', 'AuthController@getRform');
+$router->addRoute('/store', 'AuthController@register');
+$router->addProtectedRoute('/events', 'EventController@index');
 $router->addRoute('/events/view/{id}', 'EventController@view');
 
-// Dispatch the request
+$router->addProtectedRoute('/', 'HomeController@index');
+$router->addProtectedRoute('/logout', 'AuthController@logout');
+$router->addRoute('/login', 'AuthController@login');
+
+
+// $requestUri = '/EventMg/logout';
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-// $requestUri = '/login';
+
 
 $avoid_in_production = str_replace('/EventMg', '', $requestUri);
-
 
 $router->dispatch($avoid_in_production);

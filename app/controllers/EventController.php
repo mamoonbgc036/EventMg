@@ -1,19 +1,16 @@
 <?php
-require_once '../core/Controller.php';
-require_once '../models/Event.php';
+namespace App\Controllers;
+use Core\Controller;
+use App\Models\Event;
 
 class EventController extends Controller
 {
     public function index()
     {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: /login');
-        }
-
-        $event = new Event();
-        $events = $event->getAllEvents();
-        $this->view('events/index', ['events' => $events]);
+        // die('done');
+        // $event = new Event();
+        // $events = $event->getAllEvents();
+        $this->view('home/index');
     }
 
     public function create()
