@@ -7,6 +7,12 @@ use Core\Validator;
 
 class AuthController extends Controller
 {
+    protected $db_instance;
+
+    public function __construct()
+    {
+        $this->db_instance = User::getInstance();
+    }
     public function login()
     {
         $this->view('auth/login');
@@ -28,43 +34,62 @@ class AuthController extends Controller
                 'password' => 'required',
             ]);
 
-            // if (!empty($errors)) {
-            //     $_SESSION['errors'] = $errors;
-            //     header('Location: /EventMg/login');
-            //     exit();
-            // }
+            if (is_array($errors) && sizeof($errors) > 0) {
+                $_SESSION['errors'] = $errors;
+                header('Location: /EventMg/login');
+                session_destroy();
+                exit();
+            }
 
-
-            $user = User::getInstance();
-            $check = $user->check('users', ['email' => $_POST['email']]);
+            $check = $this->db_instance->check('users', ['email' => $_POST['email']]);
             if ($check && password_verify($_POST['password'], $check['password'])) {
                 if (isset($_SESSION['errors'])) {
-                    $errors = $_SESSION['errors'];
-                    unset($_SESSION['errors']);
+                    session_destroy();
                 }
                 $_SESSION['login'] = true;
-                $_SESSION['email'] = $_POST['email'];
+                $_SESSION['user_id'] = $check['id'];
+                $_SESSION['role_id'] = $check['role_id'];
                 setcookie('email', $_POST['email'], time() + (86400 * 30), "/");
                 header('Location: /EventMg/events');
             } else {
-                echo "Invalid credentials!";
+                $_SESSION['invalid'] = "Invalid credentials!";
+                header('Location: /EventMg/login');
+                exit();
             }
         }
     }
 
     public function register()
     {
-        $connection = User::getInstance();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $validator = new Validator;
 
+            $errors = $validator->validate($_POST, [
+                'email' => 'required',
+                'password' => 'required',
+                'name' => 'required',
+                'phone' => 'required',
+                'role_id' => 'required'
+            ]);
 
-            $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+            //error show
+            if (!empty($errors)) {
+                $_SESSION['errors'] = $errors;
+                header('Location: /EventMg/getRform');
+            }
+            //db insert
 
-            $_POST['password'] = $password;
-
-            $check = $connection->store('users', $_POST);
+            $_POST['password'] = password_hash($_POST['password'], PASSWORD_BCRYPT);
+            $check = $this->db_instance->seed('users', $_POST);
+            //dublicate show
+            if (is_array($check)) {
+                $_SESSION['duplicate'] = $check;
+                header('Location: /EventMg/getRform');
+                exit();
+            }
+            // redirect
             if ($check) {
+                session_destroy();
                 header('Location: /EventMg/login');
             } else {
                 echo "Registration failed!";

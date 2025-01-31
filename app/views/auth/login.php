@@ -6,6 +6,8 @@
                 <div class="card-header text-center bg-primary text-white">
                     <h4>Login</h4>
                 </div>
+
+                <?php echo isset($_SESSION['invalid']) ? '<p class="text text-center" style="color: red;">' . $_SESSION['invalid'] . '</p>' : null ?>
                 <div class="card-body">
                     <form action="/EventMg/enter" method="POST">
                         <!-- Email -->

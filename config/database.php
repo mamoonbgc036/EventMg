@@ -68,28 +68,68 @@ class Database
         return false;
     }
 
-    private function insert($sql, $params = null)
+    public function filter($table, $conditions = [])
     {
-        //print_r($params);die();
-        //die($sql);
-        $this->_error = false;
-        if ($this->_query = $this->_db->prepare($sql)) {
-            $x = 1;
-            if (count($params)) {
-                foreach ($params as $param) {
-                    $this->_query->bindValue($x, $param);
-                    $x++;
-                }
+        try {
+            // Database connection (Update credentials as needed)
+            $pdo = $this->_db;
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // Base Query
+            $sql = "SELECT * FROM $table";
+
+            // If conditions exist, append WHERE clause
+            if (!empty($conditions)) {
+                $sql .= " WHERE ";
+                $sql .= implode(" AND ", array_map(fn($key) => "$key = :$key", array_keys($conditions)));
             }
-            if ($this->_query->execute()) {
-                $this->_count = $this->_query->rowCount();
-                $this->_lastInsertID = $this->_db->lastInsertId();
-                return true;
-            } else {
-                return false;
-            }
+
+            $stmt = $pdo->prepare($sql);
+
+            // Execute query with conditions
+            $stmt->execute($conditions);
+
+            // Fetch and return results
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            die("Error: " . $e->getMessage());
         }
     }
+
+
+    public function seed($table, $post)
+    {
+        try {
+            $columns = implode(", ", array_keys($post));
+            $placeholders = ":" . implode(", :", array_keys($post));
+
+            $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
+            $stmt = $this->_db->prepare($sql);
+            foreach ($post as $key => $value) {
+                $stmt->bindValue(":" . $key, $value);
+            }
+            return $stmt->execute($post);
+        } catch (PDOException $e) {
+            $duplicate = [];
+
+            // Handle duplicate constraint violations
+            if ($e->getCode() == 23000) {
+                if (strpos($e->getMessage(), 'phone') !== false) {
+                    $duplicate['phone'] = "{$post['phone']} number is already used.";
+                }
+                if (strpos($e->getMessage(), 'email') !== false) {
+                    $duplicate['email'] = "{$post['email']} email is already registered.";
+                }
+            }
+            // Return duplicate field errors if found
+            if (!empty($duplicate)) {
+                return $duplicate;
+            }
+            return "Database error: " . $e->getMessage();
+        }
+    }
+
 
     public function delete($table, $param)
     {

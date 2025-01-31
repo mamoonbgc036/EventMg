@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
     .hero {
-        background: url('public/asset/images/header.jpg')no-repeat center center/cover;
+        background: url('<?php echo "http://" . $_SERVER['HTTP_HOST'] . "/EventMg/public/asset/images/header.jpg"; ?>') no-repeat center center/cover;
         color: white;
         text-align: center;
         padding: 100px 20px;
@@ -35,6 +35,28 @@
         <div class="container">
             <h1>Welcome to Share&Care Limited</h1>
             <p>Your trusted partner for seamless event management.</p>
-            <a href="/EventMg/login" class="btn btn-primary btn-lg">Create Event</a>
+            <a <?php echo isset($_SESSION['role_id']) ? 'href="/EventMg/event/create"' : 'href="/EventMg/login"' ?>
+                class="btn btn-primary btn-lg">Create Event</a>
         </div>
     </section>
+    <?php if (!empty($_SESSION['role_id'])): ?>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/EventMg">Event Management</a>
+
+                <!-- Navbar Toggler for Mobile View -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a href="/EventMg/logout" class="btn btn-danger">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    <?php endif; ?>

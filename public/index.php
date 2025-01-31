@@ -18,6 +18,9 @@ $router->addRoute('/enter', 'AuthController@enter');
 $router->addRoute('/getRform', 'AuthController@getRform');
 $router->addRoute('/store', 'AuthController@register');
 $router->addProtectedRoute('/events', 'EventController@index');
+$router->addProtectedRoute('/event/create', 'EventController@create');
+$router->addProtectedRoute('/event/store', 'EventController@store');
+$router->addRoute('/dashboard', 'DashboardController@index');
 $router->addRoute('/events/view/{id}', 'EventController@view');
 
 $router->addProtectedRoute('/', 'HomeController@index');
