@@ -26,10 +26,16 @@
                     <input type="date" name="event_date" class="form-control" required>
                     <?php echo isset($_SESSION['errors']['event_date']) ? '<p style="color: red;">' . $_SESSION['errors']['event_date'] . '</p>' : null ?>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Time</label>
                     <input type="time" name="event_time" class="form-control" required>
                     <?php echo isset($_SESSION['errors']['event_time']) ? '<p style="color: red;">' . $_SESSION['errors']['event_time'] . '</p>' : null ?>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Time</label>
+                    <input type="time" name="event_location" class="form-control" required>
+                    <?php echo isset($_SESSION['errors']['event_location']) ? '<p style="color: red;">' . $_SESSION['errors']['event_location'] . '</p>' : null ?>
                 </div>
                 <div class="mb-3">
                     <button type="submit" class="btn btn-success">Create Event</button>

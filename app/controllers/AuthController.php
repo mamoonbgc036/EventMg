@@ -50,7 +50,7 @@ class AuthController extends Controller
                 $_SESSION['user_id'] = $check['id'];
                 $_SESSION['role_id'] = $check['role_id'];
                 setcookie('email', $_POST['email'], time() + (86400 * 30), "/");
-                header('Location: /EventMg/events');
+                header('Location: /EventMg/dashboard');
             } else {
                 $_SESSION['invalid'] = "Invalid credentials!";
                 header('Location: /EventMg/login');

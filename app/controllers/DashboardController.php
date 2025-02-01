@@ -17,7 +17,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $data = $this->db_instance->filter('events', ['user_id' => 0]);
+        $data = $this->db_instance->filter('events', ['user_id' => $_SESSION['user_id']]);
         $this->view('dashboard/index', $data);
     }
     public function logout()

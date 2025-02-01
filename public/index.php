@@ -21,12 +21,11 @@ $router->addProtectedRoute('/events', 'EventController@index');
 $router->addProtectedRoute('/event/create', 'EventController@create');
 $router->addProtectedRoute('/event/store', 'EventController@store');
 $router->addRoute('/dashboard', 'DashboardController@index');
-$router->addRoute('/events/view/{id}', 'EventController@view');
+$router->addRoute('/events/show/{id}', 'EventController@show');
 
 $router->addProtectedRoute('/', 'HomeController@index');
 $router->addProtectedRoute('/logout', 'AuthController@logout');
 $router->addRoute('/login', 'AuthController@login');
-
 
 // $requestUri = '/EventMg/logout';
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';

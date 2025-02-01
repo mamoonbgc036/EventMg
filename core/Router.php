@@ -9,42 +9,40 @@ class Router
 
     public function addRoute($route, $action)
     {
-        $this->routes[$route] = $action;
+        $this->routes[$this->convertToRegex($route)] = $action;
     }
 
-    // Add protected routes
     public function addProtectedRoute($route, $action)
     {
-        $this->protectedRoutes[$route] = $action;
+        $this->protectedRoutes[$this->convertToRegex($route)] = $action;
     }
 
     public function dispatch($uri)
     {
         $isAuthenticated = isset($_SESSION['login']); // Check if user is logged in
 
-        // Match regular routes
-        foreach ($this->routes as $route => $action) {
-            if ($uri === $route) {
-                list($controller, $method) = explode('@', $action);
-                $controller = "App\\Controllers\\$controller";
-                $instance = new $controller();
-                return $instance->$method();
-            }
-        }
+        foreach ([$this->routes, $this->protectedRoutes] as $routes) {
+            foreach ($routes as $routePattern => $action) {
+                if (preg_match($routePattern, $uri, $matches)) {
+                    array_shift($matches); // Remove full match from array
 
-        // Match protected routes
-        foreach ($this->protectedRoutes as $route => $action) {
-            if ($uri === $route && !$isAuthenticated) {
-                header('Location: /EventMg/login');
-                exit;
-            } else {
-                if ($uri === $route) {
+                    if (isset($this->protectedRoutes[$routePattern]) && !$isAuthenticated) {
+                        header('Location: /EventMg/login');
+                        exit;
+                    }
+
                     list($controller, $method) = explode('@', $action);
                     $controller = "App\\Controllers\\$controller";
                     $instance = new $controller();
-                    return $instance->$method();
+
+                    return $instance->$method(...$matches); // Pass extracted parameters to method
                 }
             }
         }
+    }
+
+    private function convertToRegex($route)
+    {
+        return "#^" . preg_replace('/\{([^\/]+)\}/', '([^/]+)', str_replace('/', '\/', $route)) . "$#";
     }
 }

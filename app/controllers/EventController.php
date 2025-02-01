@@ -23,6 +23,12 @@ class EventController extends Controller
         $this->view('event/create');
     }
 
+    public function show($event_id)
+    {
+        $data = $this->db_instance->filter('events', ['id' => $event_id]);
+        $this->view('dashboard/single', $data);
+    }
+
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,9 +39,11 @@ class EventController extends Controller
                 'event_desc' => 'required',
                 'event_seat' => 'required',
                 'event_date' => 'required',
-                'event_time' => 'required'
+                'event_time' => 'required',
+                'event_location' => 'required'
             ]);
             //redirect
+            $_POST['user_id'] = $_SESSION['user_id'];
             if (!empty($errors)) {
                 $_SESSION['errors'] = $errors;
                 header('Location: /EventMg/event/create');
