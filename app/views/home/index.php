@@ -24,7 +24,8 @@
                                     <span
                                         class="badge bg-success"><?php echo htmlspecialchars($event['event_seat']); ?></span>
                                 </p>
-                                <a href="#" class="btn btn-outline-primary w-100 rounded-pill">Book Now</a>
+                                <button data-event="<?= $event['id'] ?>"
+                                    class="btn showFormBtn btn-outline-primary w-100 rounded-pill">Book Now</button>
                             </div>
                         </div>
                     </div>

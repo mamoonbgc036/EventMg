@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 
 define('ROOT', dirname(__DIR__));
@@ -27,6 +31,7 @@ $router->addProtectedRoute('/event/delete/{event_id}', 'EventController@delete')
 $router->addRoute('/events/show/{id}', 'EventController@show');
 
 $router->addRoute('/', 'HomeController@index');
+$router->addRoute('/book', 'BookController@book');
 $router->addProtectedRoute('/logout', 'AuthController@logout');
 $router->addRoute('/login', 'AuthController@login');
 
