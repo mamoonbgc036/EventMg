@@ -7,15 +7,24 @@
             <div class="row g-4">
                 <?php foreach ($data as $event): ?>
                     <div class="col-md-4">
-                        <div class="card">
-                            <img src="https://via.placeholder.com/400x200" class="card-img-top" alt="Event Image">
-                            <div class="card-body">
-                                <h5 class="card-title"><?php echo htmlspecialchars($event['event_name']); ?></h5>
-                                <p class="card-text">Date: <?php echo htmlspecialchars($event['event_date']); ?></p>
-                                <p class="card-text">Time: <?php echo htmlspecialchars($event['event_time']); ?></p>
-                                <p class="card-text">Seats Available: <?php echo htmlspecialchars($event['event_seat']); ?>
+                        <div class="card shadow-sm border-0 rounded-lg p-3" style="background: #f8f9fa;">
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold text-primary">
+                                    <?php echo htmlspecialchars($event['event_name']); ?>
+                                </h5>
+                                <hr class="my-2">
+                                <p class="card-text mb-1">
+                                    <strong>Date:</strong> <?php echo htmlspecialchars($event['event_date']); ?>
                                 </p>
-                                <a href="#" class="btn btn-primary">Book Now</a>
+                                <p class="card-text mb-1">
+                                    <strong>Time:</strong> <?php echo htmlspecialchars($event['event_time']); ?>
+                                </p>
+                                <p class="card-text mb-3">
+                                    <strong>Seats Available:</strong>
+                                    <span
+                                        class="badge bg-success"><?php echo htmlspecialchars($event['event_seat']); ?></span>
+                                </p>
+                                <a href="#" class="btn btn-outline-primary w-100 rounded-pill">Book Now</a>
                             </div>
                         </div>
                     </div>

@@ -16,6 +16,9 @@
             <p class="card-text"><i class="bi bi-geo-alt"></i>
                 <strong>Location:</strong><?= $data[0]['event_location'] ?>
             </p>
+            <p class="card-text"><i class="bi bi-calendar-event"></i>
+                <strong>Available Seat:</strong><?= $data[0]['event_seat'] ?>
+            </p>
         </div>
     </div>
 </div>

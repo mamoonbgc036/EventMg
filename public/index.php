@@ -19,11 +19,14 @@ $router->addRoute('/getRform', 'AuthController@getRform');
 $router->addRoute('/store', 'AuthController@register');
 $router->addProtectedRoute('/events', 'EventController@index');
 $router->addProtectedRoute('/event/create', 'EventController@create');
+$router->addProtectedRoute('/event/edit/{event_id}', 'EventController@edit');
+$router->addProtectedRoute('/event/update/{event_id}', 'EventController@update');
 $router->addProtectedRoute('/event/store', 'EventController@store');
-$router->addRoute('/dashboard', 'DashboardController@index');
+$router->addProtectedRoute('/dashboard', 'DashboardController@index');
+$router->addProtectedRoute('/event/delete/{event_id}', 'EventController@delete');
 $router->addRoute('/events/show/{id}', 'EventController@show');
 
-$router->addProtectedRoute('/', 'HomeController@index');
+$router->addRoute('/', 'HomeController@index');
 $router->addProtectedRoute('/logout', 'AuthController@logout');
 $router->addRoute('/login', 'AuthController@login');
 

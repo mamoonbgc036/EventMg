@@ -35,7 +35,6 @@
         <div class="container">
             <h1>Welcome to Share&Care Limited</h1>
             <p>Your trusted partner for seamless event management.</p>
-            <a <?php echo isset($_SESSION['role_id']) ? 'href="/EventMg/event/create"' : 'href="/EventMg/login"' ?>
-                class="btn btn-primary btn-lg">Create Event</a>
+            <a href="/EventMg/getRform" class="btn btn-primary btn-lg">Create Event</a>
         </div>
     </section>

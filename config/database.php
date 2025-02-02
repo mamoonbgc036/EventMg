@@ -29,6 +29,35 @@ class Database
         return self::$_instance;
     }
 
+    public function update($table_name, $event_id, $update)
+    {
+        $set_columns = [];
+        $values = [];
+
+        foreach ($update as $column => $value) {
+            $set_columns[] = "`$column` = ?";
+            $values[] = $value;
+        }
+
+        $set_clause = implode(", ", $set_columns);
+
+        // Prepare the SQL query
+        $sql = "UPDATE `$table_name` SET $set_clause WHERE `id` = ?";
+
+        // Prepare statement
+        $stmt = $this->_db->prepare($sql);
+
+        // Append event_id at the end for the WHERE clause
+        $values[] = $event_id;
+
+        // Execute the query with bound values
+        if ($stmt->execute($values)) {
+            return "Record updated successfully";
+        } else {
+            return "Error updating record: " . implode(", ", $stmt->errorInfo());
+        }
+    }
+
     public function read($table = null, $sql = "")
     {
         if ($table != null) {
@@ -130,18 +159,12 @@ class Database
         }
     }
 
-
     public function delete($table, $param)
     {
-        $sql = "DELETE FROM $table WHERE productId=$param";
+        $sql = "DELETE FROM $table WHERE id=$param";
         $this->_query = $this->_db->prepare($sql);
         $this->_query->execute();
         return $this;
-    }
-
-    public function update($table, $params)
-    {
-
     }
 
     public function store($table, $keyValue)

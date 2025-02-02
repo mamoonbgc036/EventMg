@@ -2,18 +2,20 @@
 <div class="container my-2">
     <div class="card shadow-lg" style="margin-top:60px">
         <div class="card-header bg-primary text-white">
-            <h4>Create Event</h4>
+            <h4>Edit Event</h4>
         </div>
         <div class="card-body">
-            <form action="/EventMg/event/store" method="POST">
+            <form action="/EventMg/event/update/<?= $data[0]['id'] ?>" method="POST">
                 <div class="mb-3">
                     <label class="form-label">Event Name</label>
-                    <input type="text" name="event_name" class="form-control" required>
+                    <input type="text" value="<?= $data[0]['event_name'] ?>" name="event_name" class="form-control"
+                        required>
                     <?php echo isset($_SESSION['errors']['event_name']) ? '<p style="color: red;">' . $_SESSION['errors']['event_name'] . '</p>' : null ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Description</label>
-                    <textarea name="event_desc" class="form-control" rows="3" required></textarea>
+                    <textarea name="event_desc" class="form-control" rows="3"
+                        required><?= $data[0]['event_name'] ?><?= $data[0]['event_desc'] ?></textarea>
                     <?php echo isset($_SESSION['errors']['event_desc']) ? '<p style="color: red;">' . $_SESSION['errors']['event_desc'] . '</p>' : null ?>
                 </div>
                 <div class="row">
@@ -39,12 +41,13 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Location</label>
-                    <input type="text" name="event_location" class="form-control" required>
+                    <label class="form-label">Event Location</label>
+                    <input type="text" value="<?= $data[0]['event_location'] ?? '' ?>" name="event_location"
+                        class="form-control" required>
                     <?php echo isset($_SESSION['errors']['event_location']) ? '<p style="color: red;">' . $_SESSION['errors']['event_location'] . '</p>' : null ?>
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-success">Create Event</button>
+                    <button type="submit" class="btn btn-success">Edit Event</button>
                 </div>
             </form>
         </div>
