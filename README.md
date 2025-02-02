@@ -24,19 +24,22 @@ Follow the steps below to set up the project on your local machine.
 
 4. **Create a Database**  
    - Open **phpMyAdmin**.  
-   - Create a new database with a name of your choice.  
+   - Create a new database with a name of your choice.
+5. **Put db Credentials**  
+   - Open .env file at root of the project directory  
+   - Put your db credentials there.  
 
-5. **Import the Database**  
+6. **Import the Database**  
    - Navigate to `C:\xampp\htdocs\EventMg`.  
    - Locate and import the `db.sql` file into the newly created database via **phpMyAdmin**.  
 
-6. **Run the Application**  
+7. **Run the Application**  
    - Open a browser and go to:  
      ```
      http://localhost/EventMg
      ```  
 
-7. **Setup Complete** 🎉  
+8. **Setup Complete** 🎉  
 
 ### Admin Credentials  
    - **Email:** `admin@gmail.com`  
