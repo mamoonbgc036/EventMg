@@ -1,4 +1,4 @@
-# EventMg - Event Management System
+# Share&Care - Event Management System
 
 ## Installation Guide  
 
