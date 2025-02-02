@@ -27,6 +27,7 @@ $router->addProtectedRoute('/event/edit/{event_id}', 'EventController@edit');
 $router->addProtectedRoute('/event/update/{event_id}', 'EventController@update');
 $router->addProtectedRoute('/event/store', 'EventController@store');
 $router->addProtectedRoute('/dashboard', 'DashboardController@index');
+$router->addProtectedRoute('/downloadCsv', 'DashboardController@downloadCsv');
 $router->addProtectedRoute('/event/delete/{event_id}', 'EventController@delete');
 $router->addRoute('/events/show/{id}', 'EventController@show');
 

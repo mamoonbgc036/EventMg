@@ -41,12 +41,12 @@
                         <!-- Role -->
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
-                            <select class="form-select" name="role_id" id="role_id">
+                            <select class="form-select" name="role" id="role">
                                 <option value="" selected>Choose a role</option>
                                 <option value="2">Editor</option>
                                 <option value="3">Viewer</option>
                             </select>
-                            <?php echo isset($_SESSION['errors']['role_id']) ? '<p style="color: red;">' . $_SESSION['errors']['role_id'] . '</p>' : null ?>
+                            <?php echo isset($_SESSION['errors']['role']) ? '<p style="color: red;">' . $_SESSION['errors']['role'] . '</p>' : null ?>
                         </div>
                         <!-- Submit Button -->
                         <div class="text-center">

@@ -9,6 +9,15 @@
                         <a href="/EventMg/event/create" class="btn btn-primary">
                             Create Event
                         </a>
+                        <?php
+                        if ($_SESSION['role_id'] == 1):
+                            ?>
+                            <a href="/EventMg/downloadCsv" class="btn btn-success btn-sm" style="margin-left: 10px;">
+                                Download CSV
+                            </a>
+                            <?php
+                        endif;
+                        ?>
                     </div>
 
                     <div class="table-responsive pt-3">

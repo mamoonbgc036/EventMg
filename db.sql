@@ -9,3 +9,9 @@ CREATE TABLE events (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+INSERT INTO users (name, email, role, password, phone) 
+VALUES ('admin', 'admin@gmail.com', 1, 
+        '$2a$13$dTsvpA5D7IbXuYedZZvW5OQIiMMA.Qzha1mj.YDol7O4/F4sdoVaS', 
+        '1234567890');
+

@@ -48,7 +48,7 @@ class AuthController extends Controller
                 }
                 $_SESSION['login'] = true;
                 $_SESSION['user_id'] = $check['id'];
-                $_SESSION['role_id'] = $check['role_id'];
+                $_SESSION['role_id'] = $check['role'];
                 setcookie('email', $_POST['email'], time() + (86400 * 30), "/");
                 header('Location: /EventMg/dashboard');
             } else {
@@ -69,7 +69,7 @@ class AuthController extends Controller
                 'password' => 'required',
                 'name' => 'required',
                 'phone' => 'required',
-                'role_id' => 'required'
+                'role' => 'required'
             ]);
 
             //error show
